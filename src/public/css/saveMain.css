@@ -1,0 +1,127 @@
+.wrap {
+    height: 844px;
+    width: 390;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+
+}
+
+/* top menu */
+.topWrap{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    flex-direction: column;
+    background: #EFEFEF;
+    flex: 4;
+}
+
+.saveHeader {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex: 0.1;
+    align-items: center;
+}
+.logo{
+    flex: 0.3;
+}
+.saveHeader p{
+    flex: 1.6;
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+}
+.hamArea{
+    flex: 0.3;
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+
+/* goalArea */
+.goalMain{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.circle {
+width: 180px;
+height: 180px;
+border-radius: 50%;
+background:  #26DFA6;
+color : white;
+
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.circleInP{
+    font-size: 20px;
+}
+
+
+.isGoalSubmenuBox{
+    display: flex;
+    font-size: 13px;
+}
+
+.isGoalSubmenuBox div{
+    display: flex;
+    padding: 5px;
+    align-items: center;
+    flex-direction: column;
+}
+
+.isGoalSubmenuBox p{
+    padding: 5px;
+}
+
+
+.goalTitle{
+    font-size: 30px;
+    display: flex;
+    padding-top: 25px;
+}
+
+/* favoriteArea */
+.favoriteArea {
+    padding: 4px;
+    flex: 1.2;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+/* Saved List */
+.savedList{
+    flex: 4.5;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.sListWrap{
+    display: flex;
+    height: 50px;
+    width: 90%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.sListWrap button{
+    background:#26DFA6;
+    color: white;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 15px;
+    border: none;
+}

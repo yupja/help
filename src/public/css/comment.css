@@ -1,0 +1,46 @@
+
+.titleBox {
+    display: flex;
+    background: pink;
+    
+}
+
+
+.postBox {
+    background: gray;
+    display: flex;
+    flex-direction:column;
+    padding: 20px;
+    color: white;
+}
+
+.commentBox {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 10px;
+    background: gold;
+}
+
+.nickName {
+    background: yellowgreen;
+    display: flex;
+    align-items: center;
+    height: 25px;
+}
+
+.commentBox span{
+    display: flex;    align-items: center;
+
+}
+
+.inputBoxComment {
+    background:skyblue;
+}
+
+.inputWrap {
+    display: flex;
+    justify-content: center;
+    border: 1px solid gray;
+    
+}
