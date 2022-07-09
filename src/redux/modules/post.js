@@ -1,110 +1,126 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { instance } from '../../shared/axios';
+import { createSlice } from "@reduxjs/toolkit";
+import { instance } from "../../shared/axios";
 
-// 메인화면 포스트 리드
-// export const loadMainposts = () => {
+
+
+// export const createPostAc = (data) => {
 //   return async function (dispatch) {
-//      try{
-//         const {data} = await instance.get('/board')
-//         dispatch(roadPosts(data));
-//         console.log(data,"redux")
-//      }catch(err){
-//         console.log(err);
-//       };
+//     await instance.post('/api/post/board',data)
+//       .then((response) => {
+//         console.log(response);
+//         dispatch(uploadPost(data))
+//         alert("등록 완료");
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//         alert("error")
+//       });
 //   };
 // };
 
-export const createPostAc = (post) => {
-  return function (dispatch) {
-    instance
-      .post('/board', post)
+export const createPostAc = (data) => {
+  return async function (dispatch) {
+    const formData = new FormData();
+
+    const request = {
+      title : data.title,
+      contents : data.contents
+    }
+    const json = JSON.stringify(request);
+    const blob = new Blob([json], { type : "application/json"});
+
+    formData.append('image',data.image)
+    formData.append('request', blob)
+    await instance.post('/api/post/board',formData,{
+      headers : {
+        "Content-Type": "multipart/form-data",
+      }
+    })
       .then((response) => {
         console.log(response);
-        dispatch(uploadPost());
-        alert('등록 완료');
+        dispatch(uploadPost(formData))
+        alert("등록 완료");
       })
       .catch((error) => {
         console.log(error);
-        alert('error');
+        alert("error")
       });
   };
 };
 
+
+
 export const loadpostsAc = () => {
   return function (dispatch) {
-    instance
-      .get('/board')
-      .then((response) => {
+    instance.get('/api/board')
+      .then(response => {
         //   console.log(response.data, "redux_data");
         dispatch(roadPosts(response.data));
       })
-      .catch((error) => {
-        console.log('get error', error);
-      });
+      .catch(error => {
+        console.log("get error", error)
+      })
   };
 };
+
+
+export const loadDetailAc = (boardIdex, boardId) => {
+  return function (dispatch) {
+      instance.get(`/api/board/detail/${boardId}`)
+      .then(response => {
+        console.log(response, "redux_data");
+        dispatch(loadDetail(response));
+      })
+      .catch(error => {
+        console.log("get error", error)
+      })
+      
+  };
+};
+
+
+
 
 export const UpdatePost = (boardId) => {
   return async function (dispatch) {
     await instance
-      .put(`/board/${boardId}}`, boardId)
-      .then((re) => {})
+      .put(`/api/board/${boardId}`, boardId)
+      .then((re) => {
+      })
       .catch((err) => {
         console.log(err);
       });
-    console.log(boardId, '수정아!');
+    console.log(boardId, "수정아!")
   };
 };
+
+
+
+
 
 export const deletePostAc = (boardId) => {
   return async function (dispatch) {
     await instance
-      .delete(`/board/${boardId}`)
+      .delete(`/api/board/${boardId}`)
       .then((response) => {
         dispatch(deletePostAc(boardId));
       })
       .catch((err) => {
         console.log(err);
       });
-    console.log(boardId, '삭제외않되');
+    console.log(boardId, "삭제외않되")
   };
 };
 
-// 무한스크롤시 컨텐츠를 더 로드
-export const loadMoreContentDB = () => {
-  return async function (dispatch, getState) {
-    const board = getState().post.postList;
-    const lastIndex = board[board.length - 1].boardId;
-    await instance.get('/board', { params: { lastboardId: lastIndex, size: 10 } }).then((response) => {
-      const new_data = [...board, ...response.data];
-      dispatch(roadPosts(new_data));
-      // dispatch(roadPosts({ data: new_data }));
 
-      /**
-       * 데이터를 dispatch해서 store에 저장하는 과정에서 발생한 에러 입니다.
-      
-       * CommunityTab.js에서 PostData의 형식이 처음에는 배열 형태였기 때문에 (PostData:[{...},{...},{...}])
-       * map함수를 사용해서 정상적으로 데이터를 볼 수 있었습니다.
-       
-       * 하지만infinite scroll로 데이터를 불러는 과정에서 data를 redux store로 dispatch할 때, 
-       * data라는 객체의 key 값에 담아서 보냈기 때문에 -> ({ data: new_data })
-       * 처음과 달리 PostData:{data:[....]}와 같은 형태로 데이터가 저장이 되었습니다
-       
-       * PostData라는 객체 안에 data라를 key를 가진 객체가 있고
-       * 해당 객체가 배열 값을 가지는 형태로 변경이 되었기 때문에 
-       * 객체에서는 map 함수를 사용할 수 없어 발생한 에러입니다.
-       */
-    });
 
-    console.log(board, lastIndex, '무스');
-  };
-};
+
 
 const postSlice = createSlice({
-  name: 'post',
+  name: "post",
   initialState: {
-    postList: [],
-    post: {},
+    postList: {data:[]},
+    post: [],
   },
   reducers: {
     uploadPost: (state, action) => {
@@ -121,6 +137,9 @@ const postSlice = createSlice({
       state.post.likeNum = action.payload.likeNum;
       state.post.userLike = action.payload.userLike;
     },
+    loadDetail: (state, action) => {
+      state.postList = action.payload;
+    },
     changeTradeState: (state, action) => {
       state.postList = state.postList.map((post) => {
         if (post.postId === action.payload.id) {
@@ -129,8 +148,11 @@ const postSlice = createSlice({
         return post;
       });
     },
+    loadDetail : (state, action)=>{
+      state.postList = action.payload;
+    }
   },
 });
 
-const { uploadPost, roadPosts, changeTradeState, setLike } = postSlice.actions;
+const { uploadPost, roadPosts, changeTradeState, loadDetail } = postSlice.actions;
 export default postSlice.reducer;

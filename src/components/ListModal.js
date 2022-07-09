@@ -10,19 +10,18 @@ const ListModal = (props) => {
   const dispatch = useDispatch();
   const params = useParams();
 
-  // const boardId = params.boardId;
-  // console.log(boardId,"boardId")
+  const saveData = useSelector((state) => state.saved.savedItem.data.savedItemList);
+  const saveDataa = useSelector((state) => state.saved.savedItem.data);
+  console.log(saveData,"save")
+  console.log(saveDataa,"savee")
 
-  const Savedata = useSelector((state) => state.saved.savedItem);
-  console.log(Savedata,"save")
-
-  console.log(props.savedList,"props")
-  const postId = (props.savedList)
-  console.log(postId,"postId")
+  console.log(props.forsaveId,"props")
+  const boardId = (props.forsaveId)
+  console.log(boardId,"boardId")
 
   React.useEffect(() => {
-    dispatch(loadsavedAc(postId))
-    dispatch(loadCommentAc())
+    dispatch(loadsavedAc(boardId))
+    // dispatch(loadCommentAc())
 },[])
 
     return (
@@ -41,14 +40,14 @@ const ListModal = (props) => {
                     <Close onClick={props.closeModall}>X</Close>
                     </Top>
                     <Middle>
-                        <p><Spann>{Savedata.userId}</Spann>님의 goalItemName <Spann>KEEP</Spann></p>
-                        <p style={{fontWeight:"700", marginTop:"2vw"}}>{Savedata.savedItemTotalPrice} 원</p>
+                        <p><Spann>{saveDataa.userId}</Spann>님의 {saveDataa.goalItemName} <Spann>KEEP</Spann></p>
+                        <p style={{fontWeight:"700", marginTop:"2vw"}}>{saveDataa.savedItemTotalPrice} 원</p>
                     </Middle>
-                    { Savedata && Savedata.map((savedItem, boardId) => {
-                      return(
-                    <List>
+                    {saveData?.map((savedItem, inddex) => (
+                    
+                    <List key={savedItem.inddex}>
                       <Left>
-                      <CreateAt>{savedItem.createdAt}</CreateAt>
+                      <CreateAt>{savedItem.createdDate}</CreateAt>
                       <SavedName>{savedItem.savedItemName}</SavedName>
                       </Left>
                       <Right>
@@ -56,8 +55,8 @@ const ListModal = (props) => {
                       <Star>⭐</Star>
                       </Right>
                     </List>
-                      )
-                    })}
+                    
+                    ))}
                 </CommentBox>
             </ModalBox>
              <CloseBtn onClick={props.closeModall}>닫기</CloseBtn>
@@ -67,34 +66,34 @@ const ListModal = (props) => {
     );
   };
 
-const Background = styled.div`
-position: fixed;
-top: 0;
-left: 0;
-bottom: 0;
-right: 0;
-background-color: rgb(0,0,0,0.3);
-/* background-color: rgba(41,41,41,0.85); */
-`;
-
-const ModalBox = styled.div`
-position: fixed;
-left: 50%;
-top: 50%;
-transform: translate(-50%, -50%);
-width: 580px;
-min-height: 50vh;
-/* border: 5px solid red; */
-box-shadow: rgb(0 0 0 / 9%) 0px 2px 12px 0px;
-display: flex;
-z-index: 99;
-  @media screen and (max-width:600px){
-    width: 100vw;
-    height: 100vh;
-    padding: 20px;
-}
-`;
-
+  const Background = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgb(0,0,0,0.3);
+  /* background-color: rgba(41,41,41,0.85); */
+  `;
+  
+  const ModalBox = styled.div`
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 580px;
+  min-height: 50vh;
+  /* border: 5px solid red; */
+  box-shadow: rgb(0 0 0 / 9%) 0px 2px 12px 0px;
+  display: flex;
+  z-index: 99;
+    @media screen and (max-width:600px){
+      width: 100vw;
+      height: 100vh;
+      padding: 20px;
+  }
+  `;
+  
 const Close = styled.button`
 /* border: 5px solid violet; */
 width: 5vw;

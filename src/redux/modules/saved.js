@@ -1,47 +1,55 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instance } from "../../shared/axios";
 
 
-
-// export const loadsavedAc = (boardId) => {
-//     return function (dispatch) {
-//         instance.get(`/savedItem/${boardId}`)
-//         .then(response => {
-//         //   console.log(response.data, "redux_data");
-//           dispatch(roadSaved(response.data));
-//         })
-//         .catch(error => {
-//           console.log("get error", error)
-//         })
-//         console.log(boardId,"리스트")
-//     };
-//   };
-
-  export const loadsavedAc = () => {
+  export const loadsavedAc = (boardId) => {
     return async function (dispatch) {
         try{
-          const {data} = await instance.get('/savedItem')
+          const {data} = await instance.get(`/api/board/save/${boardId}`)
           console.log(data,"데이타")
-          dispatch(roadSaved(data))
+          dispatch(loadSaved(data))
         }catch(error){
-          console.log(error)
+          console.log(error,"errr")
         }
       }}
+//--------------------- CREATE ---------------------------
+export const addSavedListRQ = createAsyncThunk(
+  'saved/add',
+  async (sendData) =>{
+    try{
+       await instance.post('/api/savedItem',sendData)
+    }catch(error){
+
+    }
+  } 
+)
+
+
+//---------------------- READ ----------------------------
 
 
 
+//-------------------- UPDATE ---------------------------
+
+//-------------------- DELETE ---------------------------
+
+
+
+
+//-------------------- SLICE ----------------------------
 
   const savedSlice = createSlice({
     name: "saved",
     initialState: {
-      savedItem: [],
-      save: {},
+      savedItem: {data:[]},
+      saveList:[],
+      save: [],
     },
     reducers: {
-      roadSaved: (state, action) => {
+      loadSaved: (state, action) => {
         state.savedItem = action.payload;
       }
     }});
 
-const { roadSaved } = savedSlice.actions;
+const { loadSaved } = savedSlice.actions;
 export default savedSlice.reducer;

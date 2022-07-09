@@ -1,44 +1,50 @@
-import { createSlice} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { instance } from "../../shared/axios";
 
 
 
 //--------------------- CREATE ---------------------------
-export const addGoalRQ = (data) =>{ // 기존에 없던 신규 목표태산 추가
-    return function (dispatch){
-        try{
-            instance.post('/goalItem',data);
-        }catch(error){
-            console.log(error)
-        }
-    }
-}
 
+export const addGoalAPI = createAsyncThunk( // 골아이템 등록 
+  'add/mygoal',
+  async(formData) =>{
+    try{
+      await instance.post('/api/goalItem', formData,{
+        headers :  {
+          "Content-Type": "multipart/form-data",
+        }
+      });
+    }catch(error){
+
+    }
+  }
+)
 
 //---------------------- READ ----------------------------
-export const myReadGoalRQ = () => { // 나의 태산 1개 
-    return async function (dispatch){
-        try{
-            const {data} = await instance.get('/myGoal')
-            dispatch(readMyGoal(data))
-        }catch(error){
+export const myReadGoalRQ = createAsyncThunk(
+  'read/myGoal',
+  async(dispatch)=> {
+    try {
+      const {data} = await instance.get('/api/goalItem')
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+)
 
-        }
-     }
-}
 
 export const allReadGoalRQ = () => { // 모든 사람의 태산 항목
-    return async function(dispatch){
-        try{
-            const {data} = await instance.get('/goalItem')
-            dispatch(readeAllGoal(data))
-        }catch(error){
+  return async function (dispatch) {
+    try {
+      const { data } = await instance.get('/goalItem')
+      dispatch(readeAllGoal(data))
+    } catch (error) {
 
-        }
     }
+  }
 
 }
-
 
 //-------------------- UPDATE ---------------------------
 
@@ -47,24 +53,27 @@ export const allReadGoalRQ = () => { // 모든 사람의 태산 항목
 
 
 
-
 //-------------------- SLICE ----------------------------
 const goalSlice = createSlice({
-    name : "goalItem",
-    initialState:{  
-        allGoalList: [],
-        myGoalList:[],
-       },
-reducers:{
+  name: "goalItem",
+  initialState: {
+    allGoalList: [],
+    myGoalList: [],
+    addItem:[],
+    myGoal:[]
+  },
+  reducers: {
     readeAllGoal: (state, action) => {
-        state.allGoalList = action.payload;
-      },
-    readMyGoal: (state, action) =>{
-        state.myGoalList = action.payload;
+      state.allGoalList = action.payload;
     }
+  },
+  extraReducers:{
+    [myReadGoalRQ.fulfilled]: (state, action) =>{
+      state.myGoalList = action.payload
+    },
 
-}
+  }
 });
 
-const { readeAllGoal, readMyGoal } = goalSlice.actions;
+const { readeAllGoal } = goalSlice.actions;
 export default goalSlice.reducer;

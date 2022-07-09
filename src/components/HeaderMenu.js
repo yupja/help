@@ -1,8 +1,8 @@
-import React,{useState, useEffect}  from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import styled, { keyframes } from "styled-components";
-import {GiHamburgerMenu} from 'react-icons/gi'
+import { GiHamburgerMenu } from 'react-icons/gi'
 
 
 const slider = keyframes`
@@ -15,62 +15,99 @@ const slider = keyframes`
 `;
 
 
-const HeaderMenu=(props)=>{
+const HeaderMenu = (props) => {
 
-    // 모달 상태관리
-    const [modalOpen, setModalOpen] = useState(false);
-    const openModal = () => { setModalOpen(true); };
-    const closeModal = () => { setModalOpen(false); };
+  // 모달 상태관리
+  const [modalOpen, setModalOpen] = useState(false);
+  const openModal = () => { setModalOpen(true); };
+  const closeModal = () => { setModalOpen(false); };
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    return (
-        <>
-        <div className="saveHeader">
-            <div className="logo">로고</div>
-                <p>{props.state}</p>
-            <div className="hamArea">
-                <GiHamburgerMenu onClick={() => {
-                    openModal();
-                }} />
+  return (
+    <>
+      <SaveHeader>
+        <Logo>로고</Logo>
+        <p>{props.state}</p>
+        <HamArea>
+          <GiHamburgerMenu onClick={() => { openModal(); }} />
+          {modalOpen ?
+            <Backgroud>
+              <Window>
+                <Popup>
 
-                {modalOpen ?
-                    <Backgroud>
-                        <Window>
-                            <Popup>
-                                <ButtonArea>
-                                    <button onClick={closeModal}>X</button>
-                                </ButtonArea>
-                                <MenuBar>
-                                    <div onClick={() => {
-                                        navigate("/", { state : "데일리 티끌" });
-                                    }}>데일리 티끌</div>
-                                    <div onClick={() => {
-                                        navigate("/community", { state : "티끌 자랑" });
-                                    }}>티끌 자랑</div>
-                                    <div onClick={() => {
-                                        navigate("/ranking", { state : "랭킹" });
-                                    }}>랭킹</div>
-                                    <div onClick={() => {
-                                        navigate("/mypage", { state : "마이페이지" });
-                                    }}>My</div>
-                                </MenuBar>
-                                <Footer>
-                                    <p>회원가입</p>
-                                    <p>로그인</p>
-                                </Footer>
-                            </Popup>
-                        </Window>
-                    </Backgroud>
-                    : ""}
+                  <ButtonArea>
+                    <button onClick={closeModal}>X</button>
+                  </ButtonArea>
 
-            </div>
+                  <MenuBar>
+                    <div onClick={() => {
+                      navigate("/", { state: "데일리 티끌" });
+                    }}>데일리 티끌</div>
+                    <div onClick={() => {
+                      navigate("/community", { state: "티끌 자랑" });
+                    }}>티끌 자랑</div>
+                    <div onClick={() => {
+                      navigate("/ranking", { state: "랭킹" });
+                    }}>랭킹</div>
+                    <div onClick={() => {
+                      navigate("/mypage", { state: "마이페이지" });
+                    }}>My</div>
+                  </MenuBar>
 
+                  <Footer>
+                    {localStorage.getItem('accessToken') ?
+                      <p onClick={() => localStorage.removeItem('accessToken')}>로그아웃</p>
+                      :
+                      <>
+                        <p onClick={() => {
+                          navigate("/signup");
+                        }}>회원가입</p>
+                        <p onClick={() => {
+                          navigate("/login");
+                        }}>로그인</p>
+                      </>
+                    }
 
-            </div>
-        </>
-    )
+                  </Footer>
+                </Popup>
+              </Window>
+            </Backgroud>
+            : ""}
+
+        </HamArea>
+      </SaveHeader>
+    </>
+  )
 }
+
+
+const SaveHeader = styled.div`
+display: flex;
+width: 100%;
+height: 100%;
+flex: 0.1;
+align-items: center;
+
+  p{
+    flex: 1.6;
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+  }
+`;
+
+const Logo = styled.div`
+    flex: 0.3;
+`;
+
+const HamArea = styled.div`
+flex: 0.3;
+display: flex;
+justify-content: flex-end;
+`;
+
+
 
 const Backgroud = styled.div`
 position: fixed;
@@ -112,10 +149,10 @@ justify-content: right;
 padding: 0.5rem;
 height: 5%;
 
-button{
-    border: none;
-    background: white;
-}
+  button{
+  border: none;
+  background: white;
+  }
 `;
 
 const MenuBar = styled.div`
@@ -127,10 +164,10 @@ font-size: 1.5rem;
 font-weight: bold;
 margin-top: 15%;
 
-div{
-    display: flex;
-    height: 10%;
-}
+  div{
+  display: flex;
+  height: 10%;
+  }
 
 `;
 

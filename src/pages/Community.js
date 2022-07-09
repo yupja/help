@@ -1,4 +1,4 @@
-import React,{ useState,useEffect,useRef}from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router";
 
@@ -9,36 +9,36 @@ import styled from "styled-components";
 
 
 const Community = () => {
-    const { state } = useLocation();
-    console.log(state);
+  const { state } = useLocation();
+  console.log(state);
 
-    const navigate = useNavigate();
-    const [page, setPage] = useState(<CommunityTab/>);
+  const navigate = useNavigate();
+  const [page, setPage] = useState(<CommunityTab />);
 
 
-    return(
-        <div className="wrap">
-            <div className="topWrap" style={{background:"white"}}>
-                <HeaderMenue state={state}/>            
-            </div>
+  return (
+    <div className="wrap">
+      <div className="topWrap" style={{ background: "white" }}>
+        <HeaderMenue state={state} />
+      </div>
 
-            <MenuBar>
-                    <div>티끌자랑</div>
-                    <div>쓸까말까</div>
-            </MenuBar>
+      <MenuBar>
+        <div>티끌자랑</div>
+        <div>쓸까말까</div>
+      </MenuBar>
 
-            <div style={{width:"100%"}}>
-                <RealTimeBox>
-                    <TimeList></TimeList>
-                </RealTimeBox>
+      <div style={{ width: "100%" }}>
+        <RealTimeBox>
+          <TimeList></TimeList>
+        </RealTimeBox>
 
-                <CommunityContents>
-                    {page}
-                </CommunityContents>
-            </div>
-        </div>
-        
-    ) 
+        <CommunityContents>
+          {page}
+        </CommunityContents>
+      </div>
+    </div>
+
+  )
 };
 
 

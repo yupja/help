@@ -77,6 +77,7 @@ function SearchGoal() {
           type='text'
           value={inputValue}
           onChange={changeInputValue}
+          placeholder="오늘은 어떤걸 아끼셨나요?"
         />
 
 

@@ -51,9 +51,9 @@ const AniSvg = styled.svg`
 `;
 
 const circleFill = keyframes`
-    0%{
-        stroke-dasharray:0 ${2 * Math.PI * 90};
-    }
+  0%{
+    stroke-dasharray:0 ${2 * Math.PI * 90};
+  }
 `;
 
 const AnimatedCircle = styled.circle`
